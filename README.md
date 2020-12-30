@@ -10,3 +10,5 @@ Key Features:
  - Sensor models to be included for estimation algorithm assessment.
  
 Initially will be used to demonstrate content from the Coursera Spacecraft Dynamics & Control course, specifically the final Capstone project (Mars mission simulation). Then generalised to quadcopter dynamics & control, with a Kalman estimator in the loop.  
+
+Work has begun with the attitude description library, [here](https://github.com/kierandwn/attitude).
