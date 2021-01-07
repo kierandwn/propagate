@@ -7,13 +7,15 @@ add_subdirectory(lib/attitude)
 add_subdirectory(lib/dynamics)
 add_subdirectory(lib/telemetry)
 add_subdirectory(lib/control)
+add_subdirectory(lib/frame)
 
 # Add source to this project's executable.
-add_executable (propagate "main.cpp" "lib/control/include/control.h")
-target_link_libraries(propagate 
-	dynamics 
-	telemetry 
-	control
-)
+#add_executable (propagate "main.cpp")
+#target_link_libraries(propagate 
+#	dynamics 
+#	telemetry 
+#	control
+#	frame
+#)
 
 # TODO: Add tests and install targets if needed.
