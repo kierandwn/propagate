@@ -19,13 +19,17 @@ using euler_set = attitude::euler<double>;
 // Computes the position and velocity defined by orbit_radius and 
 // orbit_angles (euler angle set) for a circular orbit.
 //
-void get_orbit_position_and_velocity(euler_set, double, vector3 *, vector3 *,
-                                     double = 42828.3  // km^3/s^2
+void get_orbit_position_and_velocity(euler_set, double, 
+  vector3 *, vector3 *, double 
 );
 
 const double lmo_orbit_rate = 0.000884797;
 
 void compute_lmo_dcm(double t, matrix3 *);
+void compute_rnn_dcm(double t, matrix3 *);
+void compute_rnn_omega(double t, vector3 * omega);
+
+void compute_rsn_dcm(matrix3 *);
 
 }  // namesapce frame
 }  // namespcae propagate
