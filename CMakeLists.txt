@@ -7,4 +7,4 @@ project ("propagate")
 
 # Include sub-projects.
 add_subdirectory("propagate")
-add_subdirectory("test")
+# add_subdirectory("test")

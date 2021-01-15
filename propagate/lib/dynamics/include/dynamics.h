@@ -11,12 +11,10 @@ using states = attitude::vector<double, kStateDims>;
 using inputs = attitude::vector<double, kStateDims>;
 using rates = attitude::vector<double, kStateDims>;
 
-rates A(states x);
+rates plant_model(states x);
 rates B(inputs u);
 
-states u(states x);
-
-rates simulate(double dt = 0.001);
+rates simulate(states, double, double=0.01);
 
 
 }  // namespace propagate

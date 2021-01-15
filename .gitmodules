@@ -1,3 +1,6 @@
 [submodule "propagate/lib/attitude"]
 	path = propagate/lib/attitude
 	url = https://github.com/kierandwn/attitude.git
+[submodule "propagate/lib/control"]
+	path = propagate/lib/control
+	url = https://github.com/kierandwn/capstone.git
