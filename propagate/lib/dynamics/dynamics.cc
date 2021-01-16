@@ -19,8 +19,7 @@ using vector3 = attitude::vector<double, 3>;
 using mrp_set = attitude::mrp<double>;
 
 
-double I[3]{10., 5., 7.5};
-//double I[3]{100., 75., 80.};
+double I[3]{100., 75., 80.};
 attitude::matrix<double, 3, 3> inertia_tensor{
   I[0], 0., 0., 
   0., I[1], 0.,
@@ -66,6 +65,8 @@ void update_logger(telemetry::log * tl, double t, states x) {
   tl->write_row();
 }
 
+vector3 external_torques = {0.5, -0.3, 0.2};
+
 rates plant_model(states x) {
   // x = switch_mrp(x);
   double sigma_sq = pow(x[0], 2.) + pow(x[1], 2.) + pow(x[2], 2.);
@@ -80,9 +81,9 @@ rates plant_model(states x) {
                     (0.5 * (x[0] * x[2] - x[1])) * x[3] + //
                     (0.5 * (x[1] * x[2] + x[0])) * x[4] +
     (0.25 * (1. - sigma_sq) + 0.5 * pow(x[2], 2.)) * x[5],
-                    (I[1] - I[2]) * x[4] * x[5],  //
-                    (I[2] - I[0]) * x[3] * x[5],  //
-                    (I[0] - I[1]) * x[3] * x[4]   //
+                    ((I[1] - I[2]) * x[4] * x[5]) + external_torques[0],  //
+                    ((I[2] - I[0]) * x[3] * x[5]) + external_torques[1],  //
+                    ((I[0] - I[1]) * x[3] * x[4]) + external_torques[2]   //
   };
   return xdot;
 }
@@ -99,7 +100,7 @@ int control_update_count = 0;
 states rk4(states x0, double t, double dt) 
 {
   if (control_update_count == 10) {
-    u_1Hz = control::control(x0, t, &tl);
+    u_1Hz = control::control(x0, t, dt, &tl);
     control_update_count = 0;
   } else {
     control_update_count += 1;
@@ -115,7 +116,7 @@ states rk4(states x0, double t, double dt)
 
 states first_order_propagator(states x0, double t, double dt) 
 {
-  inputs u = control::control(x0, t, &tl);
+  inputs u = control::control(x0, t, dt, &tl);
   return x0 + f(x0, u) * dt;
 }
 
@@ -129,24 +130,24 @@ states simulate(states x0, double tf, double dt)
 
   update_logger(&tl, t, x);
 
-  u_1Hz = control::control(x0, 0., &tl);
+  u_1Hz = control::control(x0, 0., dt, &tl);
 
   double normd;
-  double next_timecheck = 2100.;
+  double next_timecheck = 30.;
 
   while ((t += dt) < tf) {
-    x = rk4(x, t, dt);
+    x = first_order_propagator(x, t, dt);
     //x = switch_mrp(x);
 
     update_logger(&tl, t, x);
 
-    //if (abs(t - next_timecheck) < (dt / 2.0)) {
-    //  normd = sqrt(pow(x[0], 2) + pow(x[1], 2) + pow(x[2], 2));
-    //  printf("norm(%.1fs): %.6f\n", t, normd);
-    //  //display(mrp_set(x[0], x[1], x[2]));
+    if (abs(t - next_timecheck) < (dt / 2.0)) {
+      normd = sqrt(pow(x[0], 2) + pow(x[1], 2) + pow(x[2], 2));
+      printf("norm(%.1fs): %.6f\n", t, normd);
+      //display(mrp_set(x[0], x[1], x[2]));
 
-    //  next_timecheck += 100.;
-    //}
+      next_timecheck += 100.;
+    }
   }
 
   /*mrp_set sigma{x[0], x[1], x[2]};
