@@ -65,7 +65,8 @@ void update_logger(telemetry::log * tl, double t, states x) {
   tl->write_row();
 }
 
-vector3 external_torques = {0.5, -0.3, 0.2};
+//vector3 external_torques = {0.5, -0.3, 0.2};
+vector3 external_torques = {0., 0., 0.};
 
 rates plant_model(states x) {
   // x = switch_mrp(x);
