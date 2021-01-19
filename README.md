@@ -1,6 +1,3 @@
-# propagate
-
-P##LACEHOLDER, WIP. CPP.
 ## capstone 
 
 Low Mars Orbit (LMO) propagator written in the completion of the final dynamics capstone mission of the Spacecraft Dynamics & Control specialisation (University of Colorado, Coursera).
