@@ -1,0 +1,3 @@
+[submodule "capstone/lib/attitude"]
+	path = capstone/lib/attitude
+	url = https://github.com/kierandwn/attitude.git
