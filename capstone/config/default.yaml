@@ -1,0 +1,17 @@
+---
+solver:
+  integration: rk4
+  timestep: 0.01
+  start_time: 0.0
+  end_time: 120.0
+  states_are_angles: [false, false, false, true, true, true]
+  angles_are_deg: true
+  initial_states:
+    - 0.3
+    - -0.4
+    - 0.5 
+    - 1.0
+    - 1.75
+    - -2.2
+  state_ndim : 6
+... 

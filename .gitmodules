@@ -1,3 +1,9 @@
 [submodule "capstone/lib/attitude"]
 	path = capstone/lib/attitude
 	url = https://github.com/kierandwn/attitude.git
+[submodule "capstone/lib/yaml"]
+	path = capstone/lib/yaml
+	url = https://github.com/jbeder/yaml-cpp.git
+[submodule "capstone/lib/config/lib/yaml-cpp"]
+	path = capstone/lib/config/lib/yaml-cpp
+	url = https://github.com/jbeder/yaml-cpp.git
