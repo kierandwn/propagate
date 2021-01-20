@@ -3,9 +3,9 @@
 
 #include <cmath>
 
-#include "C:/Users/kdwn/projects/propagate/propagate/lib/attitude/include/matrix.h"
-#include "C:/Users/kdwn/projects/propagate/propagate/lib/attitude/include/euler.h"
-#include "C:/Users/kdwn/projects/propagate/propagate/lib/attitude/include/mrp.h"
+#include "../../attitude/include/matrix.h"
+#include "../../attitude/include/euler.h"
+#include "../../attitude/include/mrp.h"
 
 namespace propagate {
 namespace frame {

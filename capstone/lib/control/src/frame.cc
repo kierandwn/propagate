@@ -1,9 +1,9 @@
 #include "frame.h"
 
-#include "C:/Users/kdwn/projects/propagate/propagate/lib/attitude/include/matrix.h"
-#include "C:/Users/kdwn/projects/propagate/propagate/lib/attitude/include/dcm.h"
-#include "C:/Users/kdwn/projects/propagate/propagate/lib/attitude/include/euler.h"
-#include "C:/Users/kdwn/projects/propagate/propagate/lib/attitude/include/mrp.h"
+#include "../../attitude/include/matrix.h"
+#include "../../attitude/include/dcm.h"
+#include "../../attitude/include/euler.h"
+#include "../../attitude/include/mrp.h"
 
 namespace propagate {
 namespace frame {
@@ -122,7 +122,6 @@ vector3 compute_comm_omega(double t, double dt) {
   matrix3 gmo_dcm_backward = compute_comm_dcm(330. - dt);
 
   matrix3 dgmo_dcm = (gmo_dcm_forward - gmo_dcm_backward) / (2. * dt);
-  //matrix3 minus_omega_tilde = dgmo_dcm * gmo_dcm_center.transpose();
   matrix3 minus_omega_tilde = gmo_dcm_center.transpose() * dgmo_dcm;
 
   return vector3{

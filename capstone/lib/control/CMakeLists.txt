@@ -1,7 +1,10 @@
 ﻿cmake_minimum_required (VERSION 3.8)
 
-include_directories(include)
-#add_subdirectory(include/attitude)
+include_directories(
+    ../attitude/include
+    ../telemetry/include
+    ./include
+)
 
 ADD_LIBRARY(frame
     src/frame.cc
