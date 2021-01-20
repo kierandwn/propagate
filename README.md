@@ -7,6 +7,6 @@ Key Features:
  - Proportional-Derivative (PD) control implementation on Modified Rodriguez Parameter (MRP) attitude representation. More control schemes to come.
 
 Developments to come:
- - More control schemes & time interation solvers available, configurable.
+ - More control schemes & time integration schemes available, configurable.
  - Sensor models & Kalman estimation in-the-loop.
 
