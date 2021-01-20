@@ -3,8 +3,13 @@
 #
 cmake_minimum_required (VERSION 3.8)
 
-include_directories("C:/Users/kdwn/projects/propagate/propagate/lib/dynamics/include")
+#include_directories("include")
 
-ADD_LIBRARY(dynamics 
-    dynamics.cc
+ADD_LIBRARY(dynamics dynamics.cc)
+target_include_directories(dynamics PRIVATE
+	"./include"
+	"../config/lib/yaml-cpp/include"
+)
+target_link_libraries(dynamics
+	config
 )

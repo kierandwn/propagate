@@ -2,16 +2,19 @@
 
 #include <cmath>
 #include <vector>
+#include <functional>
 
-#include "C:/Users/kdwn/projects/propagate/propagate/lib/control/include/control.h"
+#include "../attitude/include/matrix.h"
+#include "../attitude/include/mrp.h"
+#include "../control/include/control.h"
 
-#include "C:/Users/kdwn/projects/propagate/propagate/lib/attitude/include/matrix.h"
-#include "C:/Users/kdwn/projects/propagate/propagate/lib/attitude/include/mrp.h"
-#include "C:/Users/kdwn/projects/propagate/propagate/lib/telemetry/include/log.h"
+#include "../config/include/config.h"
+#include "../telemetry/include/log.h"
 
 namespace propagate {
 
-telemetry::log tl("C:/Users/kdwn/projects/propagate/log/");
+config::solver CFG_;
+telemetry::log TL_("C:/Users/kdwn/projects/propagate/log/");
 
 using matrix3 = attitude::matrix<double, 3, 3>;
 using vector3 = attitude::vector<double, 3>;
@@ -55,14 +58,14 @@ states switch_mrp(states x) {
   return x;
 }
 
-void update_logger(telemetry::log * tl, double t, states x) {
+void update_logger(telemetry::log * TL_, double t, states x) {
   x = switch_mrp(x);
 
-  tl->operator[](channel_names[0]) = t;
+  TL_->operator[](channel_names[0]) = t;
   for (int i = 0; i < 6; ++i) {
-    tl->operator[](channel_names[i + 1]) = x[i];
+    TL_->operator[](channel_names[i + 1]) = x[i];
   }
-  tl->write_row();
+  TL_->write_row();
 }
 
 rates plant_model(states x) {
@@ -95,7 +98,7 @@ int control_update_count = 10;
 states rk4(states x0, double t, double dt) 
 {
   if (control_update_count == 10) {
-    u_1Hz = control::control(x0, t, &tl);
+    u_1Hz = control::simple_pd(x0, t, &TL_);
     control_update_count = 0;
   } else {
     control_update_count += 1;
@@ -109,41 +112,57 @@ states rk4(states x0, double t, double dt)
   return x0 + (k1 + k2 * 2. + k3 * 2. + k4) * (dt / 6.);
 }
 
-states first_order_propagator(states x0, double t, double dt) 
+states euler(states x0, double t, double dt) 
 {
   if (control_update_count == 10.) {
-    u_1Hz = control::control(x0, t, &tl);
+    u_1Hz = control::simple_pd(x0, t, &TL_);
     control_update_count = 0;
   } else {
     control_update_count += 1;
   }
 
-  inputs u = control::control(x0, t, &tl);
+  inputs u = control::simple_pd(x0, t, &TL_);
   return x0 + f(x0, u) * dt;
 }
 
-states simulate(states x0, double tf, double dt)
-{
-  tl.ready();
-  tl.init(channel_names);
+std::function<states(states, double, double)> determine_propagator() {
   
-  states x = x0;
+  if (CFG_.INTEGRATION_TYPE == "rk4") {
+    return rk4;
+  } else if (CFG_.INTEGRATION_TYPE == "euler") {
+    return euler;
+
+  } else {
+    return euler;
+  }
+}
+
+states simulate()
+{
+  CFG_.initialise();
+
+  TL_.ready();
+  TL_.init(channel_names);
+  
+  states x = CFG_.INITIAL_STATES;
   double t = 0.;
 
-  update_logger(&tl, t, x);
+  update_logger(&TL_, t, x);
 
-  u_1Hz = control::control(x0, 0., &tl);
+  u_1Hz = control::simple_pd(x, 0., &TL_);
+
+  std::function<states(states, double, double)> propagate_fcn = determine_propagator();
 
   double normd;
   double next_timecheck = 3400.;
 
-  while ((t += dt) < tf) {
+  while ((t += CFG_.TIMESTEP) < CFG_.END_TIME) {
     // x = switch_mrp(x);
-    x = first_order_propagator(x, t, dt);
+    x = propagate_fcn(x, t, CFG_.TIMESTEP);
 
-    update_logger(&tl, t, x);
+    update_logger(&TL_, t, x);
 
-    if (abs(t - next_timecheck) < (dt / 2.0)) {
+    if (abs(t - next_timecheck) < (CFG_.TIMESTEP / 2.0)) {
       normd = sqrt(pow(x[0], 2) + pow(x[1], 2) + pow(x[2], 2));
       printf("norm(%.1fs): %.6f\n", t, normd);
       display(mrp_set(x[0], x[1], x[2]));
