@@ -8,7 +8,7 @@
 #include <vector>
 #include <map>
 
-namespace propagate {
+namespace capstone {
 namespace telemetry {
 
 using namespace std;
@@ -16,10 +16,9 @@ using namespace std;
 class log {
  private:
   string dir_;
-  // string logfile_fmt = "Ymd_H-M-S.csv";
+  string id_;
+  
   ofstream f_;
-
-  char timestr_[32];
 
   map<string, double> buf_;
 
@@ -27,9 +26,11 @@ class log {
   log(string);
   ~log();
 
+  void set_dir(string);
   bool ready();
   bool init(vector<string>);
 
+  void update_buffer(vector<string>, double *, double);
   void write_headers();
   void write_row();
 

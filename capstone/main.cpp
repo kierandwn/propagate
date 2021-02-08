@@ -2,18 +2,33 @@
 //
 #include <iostream>
 
-#include "lib/dynamics/include/dynamics.h"
-#include "lib/attitude/include/matrix.h"
+#include "dynamics/dynamics.h"
+#include "dynamics/model.h"
 
-#include "lib/config/include/config.h"
+#include "config/config.h"
+#include "telemetry/log.h"
 
-using namespace std;
+
+using namespace capstone;
 
 int main()
 {
+  // PARSE COMMAND LINE INPUT FOR CONFIG FILEPATH
+
   config::init_node(
       "C:\\Users\\kdwn\\projects\\capstone\\capstone\\config\\default.yaml");
 
-  attitude::vector<double, 6> xf = propagate::simulate();
+  telemetry::log solver_log("capstone_states");
+
+  system::system_model s;
+  s.initialise();
+  
+  control::controller c;
+
+  propagate::propagator p(s, c);
+  p.attach_logger(&solver_log);
+  p.initialise();
+
+  attitude::vector<double, 6> xf = p.simulate();
 	return 0;
 }

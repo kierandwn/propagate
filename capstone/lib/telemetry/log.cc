@@ -1,17 +1,19 @@
-#include "log.h"
+#include "telemetry/log.h"
 
 #include <ctime>
 #include <fstream>
 #include <string>
 
-namespace propagate {
+namespace capstone {
 namespace telemetry {
 
 
 using namespace std;
 
-log::log(string log_directory) : dir_(log_directory) {}
+log::log(string string_id) : id_(string_id) {}
 log::~log() { f_.close(); }
+
+void log::set_dir(string log_directory) { dir_ = log_directory; }
 
 bool log::ready() {
   time_t curr_time;
@@ -20,8 +22,11 @@ bool log::ready() {
   time(&curr_time);
   curr_tm = localtime(&curr_time);
 
-  strftime(timestr_, 32, "propagate_%Y%m%d_%H-%M-%S.csv", curr_tm);
-  f_.open((dir_ + timestr_).c_str());
+  int len_timestr = 23 + id_.size();
+  char * timestr = new char[len_timestr];
+
+  strftime(timestr, len_timestr, id_.append("_%Y%m%d_%H-%M-%S.csv").c_str(), curr_tm);
+  f_.open((dir_ + timestr).c_str());
   return f_.is_open();
 }
 
@@ -62,6 +67,13 @@ void log::write_row() {
   }
 }
 
+void log::update_buffer(vector<string> channel_names, double * x, double t) {
+  buf_[channel_names[0]] = t;
+
+  for (int i = 0; i < 6; ++i) {
+    buf_[channel_names[i + 1]] = x[i];
+  }
+}
 
 }  // namespace telemetry
 }  // namespace propagate

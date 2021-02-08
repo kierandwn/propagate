@@ -18,4 +18,4 @@ target_link_libraries(control
 	frame
 )
 
-add_subdirectory("test")
+#add_subdirectory("test")

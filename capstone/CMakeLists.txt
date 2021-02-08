@@ -9,10 +9,19 @@ add_subdirectory(lib/telemetry)
 add_subdirectory(lib/control)
 add_subdirectory(lib/config)
 
+include_directories(
+	lib/config/include
+	lib/attitude/include
+	lib/control/include
+	lib/dynamics/include
+	lib/telemetry/include
+)
+
 # Add source to this project's executable.
-add_executable (propagate "main.cpp" "lib/config/include/config/solver.h" "lib/config/include/config.h")
+add_executable (propagate "main.cpp")
 target_link_libraries(propagate 
 	dynamics 
+	model
 	telemetry 
 	control
 	config

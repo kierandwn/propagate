@@ -8,7 +8,7 @@ set(YAML_CPP_BUILD_CONTRIB OFF CACHE BOOL "disable yaml contrib")
 
 add_subdirectory(lib/yaml-cpp)
 
-add_library(config src/config.cc)
+add_library(config src/config.cc "include/config/system.h" "include/config/control.h")
 target_include_directories(config PRIVATE
     "./include"
 	"../lib/yaml-cpp/include"

@@ -1,15 +1,15 @@
-#include "frame.h"
+#include "control/frame.h"
 
-#include "../../attitude/include/matrix.h"
-#include "../../attitude/include/dcm.h"
-#include "../../attitude/include/euler.h"
-#include "../../attitude/include/mrp.h"
+#include "attitude/matrix.h"
+#include "attitude/dcm.h"
+#include "attitude/euler.h"
+#include "attitude/mrp.h"
 
-namespace propagate {
+namespace capstone {
 namespace frame {
 
 using vector3 = attitude::vector<double, 3>;
-using matrix3 = attitude::matrix<double, 3, 3>;
+using matrix3 = attitude::mn_matrix<double, 3, 3>;
 
 using euler_set = attitude::euler<double>;
 using mrp_set = attitude::mrp<double>;
@@ -175,4 +175,4 @@ vector3 compute_omega_error(double t, int phase, mrp_set sigma, vector3 omega) {
 }
 
 }  // namespace frame
-}  // namespace propagate
+}  // namespace capstone

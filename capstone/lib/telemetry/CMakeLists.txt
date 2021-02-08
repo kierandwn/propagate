@@ -3,7 +3,9 @@
 #
 cmake_minimum_required (VERSION 3.8)
 
-include_directories("C:/Users/kdwn/projects/propagate/propagate/lib/telemetry/include")
+include_directories(
+    ./include
+)
 
 ADD_LIBRARY(telemetry 
     "log.cc"

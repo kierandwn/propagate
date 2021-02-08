@@ -1,12 +1,13 @@
-#include "control.h"
-#include "frame.h"
+#include "control/control.h"
+#include "control/frame.h"
 
 #include <cmath>
 
-#include "../../telemetry/include/log.h"
-#include "../../attitude/include/matrix.h"
-#include "../../attitude/include/mrp.h"
-#include "../../attitude/include/euler.h"
+#include "telemetry/log.h"
+
+#include "attitude/matrix.h"
+#include "attitude/mrp.h"
+#include "attitude/euler.h"
 
 // --- SPACECRAFT DYNAMICS AND CONTROL SPECIALISATION: CAPSTONE MISSION ---
 //            .       .                   .       .      .     .      .
@@ -31,14 +32,14 @@
 // ____________------------                        -------------_________
 // 
 
-namespace propagate {
+namespace capstone {
 namespace control {
 
 
 using namespace attitude;
 
 
-using matrix3 = attitude::matrix<double, 3, 3>;
+using matrix3 = attitude::mn_matrix<double, 3, 3>;
 using vector3 = attitude::vector<double, 3>;
 
 using states = attitude::vector<double, kStateDims>;
@@ -80,13 +81,6 @@ matrix3 inertia_tensor{
 const std::vector<std::string> ref_channel_names{"ref_sigma_0", "ref_sigma_1",
                                                  "ref_sigma_2", "ref_omega_0",
                                                  "ref_omega_1", "ref_omega_2"};
-
-void update_logger_err(telemetry::log * tl, mrp sigma_ref, vector3 omega_ref) {
-  for (int i = 0; i < 3; ++i) {
-    tl->operator[](ref_channel_names[i]) = sigma_ref[i];
-    tl->operator[](ref_channel_names[i + 3]) = omega_ref[i];
-  }
-}
 
 matrix3 B(vector3 sigma) {
   return attitude::eye<double, 3>() * (1. - pow(sigma.norm(), 2)) +
@@ -201,7 +195,7 @@ void compute_ref_state_orbit(double t,
   omega_err = frame::compute_omega_error(t, mission_phase, sigma, omega);
 }
 
-inputs simple_pd(states x, double t, telemetry::log * tl) 
+inputs simple_pd(states x, double t) 
 { 
   mrp sigma( x[0], x[1], x[2] );
   vector3 omega{ x[3], x[4], x[5] };

@@ -1,7 +1,7 @@
 ---
-simulation_meta: 
+- simulation_meta: 
   log_directory: C:/Users/kdwn/projects/propagate/log/
-solver:
+- solver:
   integration_scheme: rk4
   timestep: 0.01
   start_time: 0.0
@@ -25,7 +25,7 @@ solver:
   state_ndim : 6
   control_in_lockstep: true
   control_update_rate: 100
-system:
+- system:
   plant_model: attitude_kinematics_mrp
   actuator_model: direct
   inertia: [
@@ -33,13 +33,12 @@ system:
      0., 5., 0.,
      0., 0., 7.5
   ]
-control:
-  scheme:
-    type: simple_pd
-    gain:
-      - proportional: 5.
-      - derivative: 10.
-      - integral: .01
-    integral_term: false
+- control:
+  scheme: simple_pd
+  gain:
+    - proportional: 5.
+    - derivative: 10.
+    - integral: .01
+  integral_term: false
   reference_state: orbit
 ... 

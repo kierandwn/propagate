@@ -3,15 +3,15 @@
 
 #include <cmath>
 
-#include "../../attitude/include/matrix.h"
-#include "../../attitude/include/euler.h"
-#include "../../attitude/include/mrp.h"
+#include "attitude/matrix.h"
+#include "attitude/euler.h"
+#include "attitude/mrp.h"
 
-namespace propagate {
+namespace capstone {
 namespace frame {
 
 using vector3 = attitude::vector<double, 3>;
-using matrix3 = attitude::matrix<double, 3, 3>;
+using matrix3 = attitude::mn_matrix<double, 3, 3>;
 
 using euler_set = attitude::euler<double>;
 using mrp_set = attitude::mrp<double>;
@@ -42,5 +42,5 @@ mrp_set compute_attitude_error(double, int, mrp_set);
 vector3 compute_omega_error(double, int, mrp_set, vector3);
 
 }  // namesapce frame
-}  // namespcae propagate
+}  // namespcae capstone
 #endif  // PROPAGATE_FRAME_H_

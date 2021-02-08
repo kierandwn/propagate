@@ -1,4 +1,4 @@
-﻿set(TEST_EXEC ${CMAKE_PROJECT_NAME}_test)
+﻿set(TEST_EXEC capstone_test)
 
 file(GLOB_RECURSE TEST_SOURCES LIST_DIRECTORIES false *.h *.cc)
 set(SOURCES ${TEST_SOURCES})

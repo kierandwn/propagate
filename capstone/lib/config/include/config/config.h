@@ -2,12 +2,12 @@
 #define CAPSTONE_CONFIG_H_
 
 #include <string>
-// #include "config/solver.h"
 
 #include "yaml-cpp/yaml.h"
 
 using namespace std;
 
+namespace capstone {
 namespace config {
 
 void set_file(string);
@@ -18,5 +18,6 @@ YAML::Node get_base_node();
 YAML::Node get_config_node(string);
 
 
-} // namespace config
+}  // namespace config
+}  // namespace capstone
 #endif // CAPSTONE_CONFIF_H_
