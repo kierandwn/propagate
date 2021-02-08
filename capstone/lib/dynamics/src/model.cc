@@ -31,7 +31,9 @@ rates direct(inputs u) { return attitude::eye<double, 6>() * u; }
 void system_model::initialise() { 
   cfg_.initialise(); 
 
-  // inertia_tensor_ = cfg_.INERTIA;
+  set_plant_model();
+  set_actuator_model();
+
   torques_to_accels_ = attitude::mn_matrix<double, 6, 6>{
     1., 0., 0., 0., 0., 0.,
     0., 1., 0., 0., 0., 0., 

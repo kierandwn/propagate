@@ -24,7 +24,6 @@ rates direct(inputs);
 function<rates(states)> determine_plant_model(string);
 function<rates(inputs)> determine_actuator_model(string);
 
-
 class system_model {
  private:
   config::system cfg_;

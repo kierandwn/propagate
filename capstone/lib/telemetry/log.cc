@@ -3,6 +3,7 @@
 #include <ctime>
 #include <fstream>
 #include <string>
+#include <cstdio>
 
 namespace capstone {
 namespace telemetry {
@@ -26,12 +27,17 @@ bool log::ready() {
   char * timestr = new char[len_timestr];
 
   strftime(timestr, len_timestr, id_.append("_%Y%m%d_%H-%M-%S.csv").c_str(), curr_tm);
+  
+  printf("logging begins -> %s", (dir_ + timestr).c_str());
+
   f_.open((dir_ + timestr).c_str());
+  
   return f_.is_open();
 }
 
 bool log::init (vector<string> channel_names) {
   vector<string>::iterator c;
+  buf_["time"] = -1.;
   for (c = channel_names.begin(); c != channel_names.end(); ++c) {
     if (buf_.find(*(c)) == buf_.end()) {
       buf_[*(c)] = -1.;
@@ -68,10 +74,10 @@ void log::write_row() {
 }
 
 void log::update_buffer(vector<string> channel_names, double * x, double t) {
-  buf_[channel_names[0]] = t;
+  buf_["time"] = t;
 
   for (int i = 0; i < 6; ++i) {
-    buf_[channel_names[i + 1]] = x[i];
+    buf_[channel_names[i]] = x[i];
   }
 }
 

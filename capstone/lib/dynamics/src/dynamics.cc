@@ -34,8 +34,10 @@ void propagator::attach_logger(telemetry::log * logger) { logger_ = logger; }
 void propagator::initialise() { 
   cfg_.initialise(); 
 
-  logger_->ready();
+  int file_is_open = logger_->ready();
   logger_->init(cfg_.CHANNEL_NAMES);
+
+  std::cout << "file_is_open: " << file_is_open << std::endl;
 
   set_propagator();
 

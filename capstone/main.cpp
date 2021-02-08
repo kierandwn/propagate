@@ -16,7 +16,8 @@ int main()
   // PARSE COMMAND LINE INPUT FOR CONFIG FILEPATH
 
   config::init_node(
-      "C:\\Users\\kdwn\\projects\\capstone\\capstone\\config\\default.yaml");
+    "/home/kierandwn/projects/capstone/capstone/config/default.yaml"
+  );
 
   telemetry::log solver_log("capstone_states");
 

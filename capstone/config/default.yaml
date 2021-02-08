@@ -1,8 +1,8 @@
 ---
 simulation_meta: 
-  log_directory: C:/Users/kdwn/projects/propagate/log/
+  log_directory: /home/kierandwn/projects/capstone/log/
 solver:
-  integration_scheme: rk4
+  integration_scheme: euler
   timestep: 0.01
   start_time: 0.0
   end_time: 120.0
